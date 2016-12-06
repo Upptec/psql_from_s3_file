@@ -1,0 +1,13 @@
+#!/bin/bash
+
+S3SOURCE=$1
+S3LOGTARGET=$2
+OUTPUTLOG=$TEMP_SQL_DIR/output.log
+SQLFILE=$(echo "${S3SOURCE}"  | awk -F/ '{print $NF}')
+SQLFULLPATH="${TEMP_SQL_DIR}/${SQLFILE}"
+aws s3 cp "${S3SOURCE}" $TEMP_SQL_DIR/
+psql "${PGURL}" --file=$SQLFULLPATH --output=$OUTPUTLOG
+if [[ -n "${S3LOGTARGET}" ]]; then
+  aws s3 mv $OUTPUTLOG "${S3LOGTARGET}"
+fi
+rm $SQLFULLPATH
