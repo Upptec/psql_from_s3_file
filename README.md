@@ -1,6 +1,6 @@
-# PSQL FROM S3_FILE
+# psql from s3-file
 A small utility to execute sql-commands from a file that resides in S3.
-Can log to a file that
+Can log to a file in S3.
 
 ## Requirements
 
@@ -21,12 +21,12 @@ Be sure to bind a temporary volume to `/sqltemp` (or somewhere else, but set env
 Entrypoint is the script [execute_psql](execute_sql).
 
 The script takes these parameters:
-    `s3://mybucket/myfolder/my_sql_script.sql` and optional a log destination `s3://mybucket/mylogfolder/my_sql_script.log`
+    `s3://mybucket/myfolder/my_sql_script.sql` (required) and a log destination `s3://mybucket/mylogfolder/my_sql_script.log` (optional).
 
 
 ## psql parameters
 
-Utility will use these parameters for psql :
+Utility will use these parameters for psql:
 `psql "${PG_URL}" --file=<file from S3> --output=/sqltemp/output.log`
 
 explanied as (from `man psql`):
@@ -44,4 +44,4 @@ explanied as (from `man psql`):
 ```
 ## Example
 
-`docker run --rm -it -e PGURL=xx AWS_DEFAULT_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=xx -e AWS_SECRET_ACCESS_KEY=xx -v /sqltemp upptec/psql_from_s3_fle s3://my_bucket/my_folder/my_sql_script.sql`
+`docker run --rm -it -e PGURL=xx AWS_DEFAULT_REGION=eu-west-1 -e AWS_ACCESS_KEY_ID=xx -e AWS_SECRET_ACCESS_KEY=xx -v /sqltemp upptec/psql_from_s3_file s3://my_bucket/my_folder/my_sql_script.sql`
